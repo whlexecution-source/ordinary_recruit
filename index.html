@@ -103,10 +103,13 @@
             margin-bottom: 20px;
         }
         
-        .history-card h6 {
-            color: #000 !important;
+        .sub-header {
+            color: #000;
+            font-weight: 600;
+            margin-bottom: 10px;
+            margin-top: 20px;
+            font-size: 1rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .upload-area {
@@ -180,6 +183,13 @@
         .btn-outline-secondary:hover {
             background-color: #eee;
             color: #000;
+        }
+        
+        /* ปรับแต่ง Input Group สำหรับระยะเวลา */
+        .input-group-text {
+            background-color: #f8f9fa;
+            border-color: var(--border-grey);
+            font-size: 0.9rem;
         }
 
         @media (max-width: 767.98px) {
@@ -311,40 +321,63 @@
                 <!-- 3. ประวัติการทำงาน -->
                 <h4 class="section-title">ประวัติการทำงาน (3 ล่าสุด)</h4>
                 
-                <!-- Job 1 -->
+                <!-- Job 1 (REQUIRED) -->
+                <h6 class="sub-header"><i class="fas fa-briefcase me-2"></i>1. สถานที่ทำงานล่าสุด <span class="required-star">*</span></h6>
                 <div class="history-card">
-                    <h6 class="fw-bold mb-3"><i class="fas fa-briefcase me-2"></i>1. บริษัทล่าสุด</h6>
                     <div class="row g-2">
                         <div class="col-12">
-                            <input type="text" class="form-control" name="job1_company" placeholder="ชื่อบริษัท">
+                            <input type="text" class="form-control" name="job1_company" placeholder="ชื่อสถานที่ทำงาน / แบรนด์" required>
                         </div>
                         <div class="col-6">
-                            <input type="text" class="form-control" name="job1_position" placeholder="ตำแหน่ง">
+                            <input type="text" class="form-control" name="job1_position" placeholder="ตำแหน่ง" required>
+                        </div>
+                        <!-- Dropdown ระยะเวลา -->
+                        <div class="col-12 col-md-6">
+                            <div class="input-group">
+                                <select class="form-select" id="job1_year" required>
+                                    <option value="" selected disabled>ปี</option>
+                                    <script>for(let i=0;i<=20;i++) document.write(`<option value="${i}">${i}</option>`);</script>
+                                </select>
+                                <span class="input-group-text">ปี</span>
+                                <select class="form-select" id="job1_month" required>
+                                    <option value="" selected disabled>เดือน</option>
+                                    <script>for(let i=0;i<=11;i++) document.write(`<option value="${i}">${i}</option>`);</script>
+                                </select>
+                                <span class="input-group-text">เดือน</span>
+                            </div>
                         </div>
                         <div class="col-6">
-                            <input type="text" class="form-control" name="job1_duration" placeholder="ระยะเวลา">
+                            <input type="text" class="form-control" name="job1_sales" placeholder="Target ยอดขายต่อเดือน" required>
                         </div>
                         <div class="col-6">
-                            <input type="text" class="form-control" name="job1_sales" placeholder="Target ยอดขายต่อเดือน">
-                        </div>
-                        <div class="col-6">
-                            <input type="text" class="form-control" name="job1_income" placeholder="รายได้รวม">
+                            <input type="text" class="form-control" name="job1_income" placeholder="รายได้รวม" required>
                         </div>
                     </div>
                 </div>
 
-                <!-- Job 2 -->
+                <!-- Job 2 (OPTIONAL) -->
+                <h6 class="sub-header">2. สถานที่ทำงานก่อนหน้า (ถ้ามี)</h6>
                 <div class="history-card">
-                    <h6 class="fw-bold mb-3">2. บริษัทก่อนหน้า</h6>
                     <div class="row g-2">
                         <div class="col-12">
-                            <input type="text" class="form-control" name="job2_company" placeholder="ชื่อบริษัท">
+                            <input type="text" class="form-control" name="job2_company" placeholder="ชื่อสถานที่ทำงาน / แบรนด์">
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" name="job2_position" placeholder="ตำแหน่ง">
                         </div>
-                        <div class="col-6">
-                            <input type="text" class="form-control" name="job2_duration" placeholder="ระยะเวลา">
+                        <div class="col-12 col-md-6">
+                            <div class="input-group">
+                                <select class="form-select" id="job2_year">
+                                    <option value="" selected>0</option>
+                                    <script>for(let i=1;i<=20;i++) document.write(`<option value="${i}">${i}</option>`);</script>
+                                </select>
+                                <span class="input-group-text">ปี</span>
+                                <select class="form-select" id="job2_month">
+                                    <option value="" selected>0</option>
+                                    <script>for(let i=1;i<=11;i++) document.write(`<option value="${i}">${i}</option>`);</script>
+                                </select>
+                                <span class="input-group-text">เดือน</span>
+                            </div>
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" name="job2_sales" placeholder="Target ยอดขายต่อเดือน">
@@ -355,18 +388,29 @@
                     </div>
                 </div>
 
-                <!-- Job 3 -->
+                <!-- Job 3 (OPTIONAL) -->
+                <h6 class="sub-header">3. สถานที่ทำงานก่อนหน้า (ถ้ามี)</h6>
                 <div class="history-card">
-                    <h6 class="fw-bold mb-3">3. บริษัทก่อนหน้า</h6>
                     <div class="row g-2">
                         <div class="col-12">
-                            <input type="text" class="form-control" name="job3_company" placeholder="ชื่อบริษัท">
+                            <input type="text" class="form-control" name="job3_company" placeholder="ชื่อสถานที่ทำงาน / แบรนด์">
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" name="job3_position" placeholder="ตำแหน่ง">
                         </div>
-                        <div class="col-6">
-                            <input type="text" class="form-control" name="job3_duration" placeholder="ระยะเวลา">
+                        <div class="col-12 col-md-6">
+                            <div class="input-group">
+                                <select class="form-select" id="job3_year">
+                                    <option value="" selected>0</option>
+                                    <script>for(let i=1;i<=20;i++) document.write(`<option value="${i}">${i}</option>`);</script>
+                                </select>
+                                <span class="input-group-text">ปี</span>
+                                <select class="form-select" id="job3_month">
+                                    <option value="" selected>0</option>
+                                    <script>for(let i=1;i<=11;i++) document.write(`<option value="${i}">${i}</option>`);</script>
+                                </select>
+                                <span class="input-group-text">เดือน</span>
+                            </div>
                         </div>
                         <div class="col-6">
                             <input type="text" class="form-control" name="job3_sales" placeholder="Target ยอดขายต่อเดือน">
@@ -476,10 +520,6 @@
         // Function to load branches from Google Sheet
         async function loadBranches() {
             try {
-                // สำหรับ doGet บางครั้งอาจติด CORS หรือ Redirect ในบาง environment
-                // แต่ถ้า Deploy as Web App (Anyone can access) โดยทั่วไปจะ fetch ได้
-                // หาก fetch ไม่ได้ อาจต้องใช้เทคนิค JSONP หรือตั้งค่า header ฝั่ง Apps Script เพิ่ม
-                
                 const response = await fetch(GOOGLE_SCRIPT_URL); 
                 const data = await response.json();
 
@@ -506,7 +546,6 @@
             }
         }
 
-        // Load branches on page load
         document.addEventListener('DOMContentLoaded', loadBranches);
 
         // Handle File Selection
@@ -606,6 +645,26 @@
             const formData = new FormData(this);
             const dataObj = Object.fromEntries(formData.entries());
             
+            // --- CONSTRUCT DURATION STRINGS FROM DROPDOWNS ---
+            // รวมค่า ปี+เดือน เป็นข้อความเดียวเพื่อส่งไป Backend ช่องเดิม (jobX_duration)
+            
+            // Job 1
+            const j1y = document.getElementById('job1_year').value || '0';
+            const j1m = document.getElementById('job1_month').value || '0';
+            dataObj.job1_duration = `${j1y} ปี ${j1m} เดือน`;
+
+            // Job 2
+            const j2y = document.getElementById('job2_year').value || '0';
+            const j2m = document.getElementById('job2_month').value || '0';
+            dataObj.job2_duration = `${j2y} ปี ${j2m} เดือน`;
+
+            // Job 3
+            const j3y = document.getElementById('job3_year').value || '0';
+            const j3m = document.getElementById('job3_month').value || '0';
+            dataObj.job3_duration = `${j3y} ปี ${j3m} เดือน`;
+
+            // -------------------------------------------------
+
             dataObj.image = {
                 data: base64Image,
                 mimeType: imageMimeType,
