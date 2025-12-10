@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>แบบฟอร์มลงทะเบียนปฏิบัติงาน</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts (Prompt) -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-black: #111111;
+            --secondary-grey: #6c757d;
+            --light-grey-bg: #eef0f2;
+            --border-grey: #ced4da;
+            --hover-grey: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: var(--light-grey-bg);
+            color: #333;
+            padding-bottom: 50px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 0;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border: 1px solid #dcdcdc;
+        }
+
+        .header-bg {
+            background: var(--primary-black);
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .form-section { padding: 40px; }
+
+        .section-title {
+            position: relative;
+            padding-left: 15px;
+            margin-bottom: 25px;
+            margin-top: 30px;
+            font-weight: 600;
+            color: var(--primary-black);
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            bottom: 5px;
+            width: 4px;
+            background: #444; 
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #444;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-control, .form-select {
+            padding: 12px 15px;
+            border-radius: 4px;
+            border: 1px solid var(--border-grey);
+            background-color: #fff;
+            color: #000;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #000;
+            box-shadow: none;
+            outline: 1px solid #000;
+            background-color: #fff;
+        }
+
+        .history-card {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-left: 5px solid #555;
+            border-radius: 4px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .history-card h6 {
+            color: #000 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .upload-area {
+            border: 2px dashed #666; 
+            border-radius: 4px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #fdfdfd;
+        }
+        
+        .upload-area:hover {
+            background-color: #f0f0f0;
+            border-color: #000;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 4px;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            display: none;
+            object-fit: contain;
+        }
+
+        .btn-submit {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 0;
+            background-color: var(--primary-black);
+            border: 1px solid var(--primary-black);
+            color: #ffffff;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-submit:hover, .btn-submit:active {
+            background-color: #333;
+            border-color: #333;
+            transform: translateY(-1px);
+        }
+
+        .btn-check:checked + .btn-outline-dark {
+            background-color: #222;
+            color: #fff;
+            border-color: #222;
+        }
+        
+        .btn-outline-dark {
+            border-radius: 0;
+            border-color: #ccc;
+            color: #666;
+        }
+        
+        .btn-outline-dark:hover {
+            background-color: #eee;
+            color: #000;
+            border-color: #999;
+        }
+
+        .btn-outline-secondary {
+            border-radius: 0;
+            border-color: #ccc;
+            color: #555;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #eee;
+            color: #000;
+        }
+
+        @media (max-width: 767.98px) {
+            body { background-color: #ffffff; padding-bottom: 0; }
+            .main-container { margin: 0; border: none; box-shadow: none; max-width: 100%; }
+            .header-bg { padding: 40px 20px; }
+            .form-section { padding: 25px 20px 80px 20px; }
+            .col-md-2, .col-md-4, .col-md-5, .col-md-6 { margin-bottom: 10px; }
+        }
+
+        #loadingOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .text-black-theme { color: #000 !important; }
+        .required-star { color: #dc3545; font-weight: bold; margin-left: 3px; }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <div class="header-bg">
+            <h2 class="fw-bold mb-2"><i class="fas fa-clipboard-user me-2"></i>ลงทะเบียน</h2>
+            <p class="mb-0 small" style="color: #bbb;">กรอกข้อมูลเพื่อลงทะเบียนปฏิบัติงาน</p>
+        </div>
+
+        <div class="form-section">
+            <form id="registerForm" novalidate>
+                
+                <!-- 1. ข้อมูลการปฏิบัติงาน -->
+                <h4 class="section-title">ข้อมูลการทำงาน</h4>
+                <div class="row g-3">
+                    <div class="col-md-6 col-12">
+                        <label class="form-label">สาขาที่ลงทำงาน <span class="required-star">*</span></label>
+                        <select class="form-select" id="branchSelect" name="branch" required>
+                            <option value="" selected disabled>กำลังโหลดรายชื่อสาขา...</option>
+                            <!-- ตัวเลือกจะถูกเติมด้วย JavaScript -->
+                        </select>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <label class="form-label">วันที่ลงทำงาน <span class="required-star">*</span></label>
+                        <input type="date" class="form-control" name="workDate" required>
+                    </div>
+                </div>
+
+                <!-- 2. ข้อมูลส่วนตัว -->
+                <h4 class="section-title">ข้อมูลส่วนตัว</h4>
+                <div class="row g-3">
+                    <div class="col-4 col-md-2">
+                        <label class="form-label">คำนำหน้า <span class="required-star">*</span></label>
+                        <select class="form-select" name="prefix" required>
+                            <option value="" selected disabled>เลือก...</option>
+                            <option value="นาย">นาย</option>
+                            <option value="นาง">นาง</option>
+                            <option value="นางสาว">น.ส.</option>
+                        </select>
+                    </div>
+                    <div class="col-8 col-md-5">
+                        <label class="form-label">ชื่อ <span class="required-star">*</span></label>
+                        <input type="text" class="form-control" name="firstName" placeholder="ชื่อจริง" required>
+                    </div>
+                    <div class="col-12 col-md-5">
+                        <label class="form-label">นามสกุล <span class="required-star">*</span></label>
+                        <input type="text" class="form-control" name="lastName" placeholder="นามสกุล" required>
+                    </div>
+
+                    <div class="col-6 col-md-6">
+                        <label class="form-label">ชื่อเล่น <span class="required-star">*</span></label>
+                        <input type="text" class="form-control" name="nickname" required>
+                    </div>
+                    
+                    <div class="col-6 col-md-2">
+                        <label class="form-label">อายุ (ปี)</label>
+                        <input type="number" class="form-control" name="age" min="18">
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <label class="form-label">น้ำหนัก (กก.)</label>
+                        <input type="number" class="form-control" name="weight">
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <label class="form-label">ส่วนสูง (ซม.)</label>
+                        <input type="number" class="form-control" name="height">
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">ไซซ์ชุดยูนิฟอร์ม <span class="required-star">*</span></label>
+                        <select class="form-select" name="uniformSize" required>
+                            <option value="" selected disabled>เลือกไซซ์...</option>
+                            <option value="SS">SS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="2XL">2XL</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">วุฒิการศึกษา</label>
+                        <select class="form-select" name="education">
+                            <option value="ต่ำกว่า ม.6">ต่ำกว่า ม.6</option>
+                            <option value="ม.6 / ปวช.">ม.6 / ปวช.</option>
+                            <option value="ปวส. / อนุปริญญา">ปวส. / อนุปริญญา</option>
+                            <option value="ปริญญาตรี">ปริญญาตรี</option>
+                            <option value="สูงกว่าปริญญาตรี">สูงกว่าปริญญาตรี</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">เบอร์ติดต่อ <span class="required-star">*</span></label>
+                        <input type="tel" class="form-control" name="phone" placeholder="0xxxxxxxxx" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">ไอดี ไลน์ <span class="required-star">*</span></label>
+                        <input type="text" class="form-control" name="lineId" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">เลขบัตรประชาชน (13 หลัก) <span class="required-star">*</span></label>
+                        <input type="text" class="form-control" name="idCard" maxlength="13" pattern="\d{13}" title="กรุณากรอกเลข 13 หลัก" placeholder="xxxxxxxxxxxxx" inputmode="numeric" required>
+                    </div>
+                </div>
+
+                <!-- 3. ประวัติการทำงาน -->
+                <h4 class="section-title">ประวัติการทำงาน (3 ล่าสุด)</h4>
+                
+                <!-- Job 1 -->
+                <div class="history-card">
+                    <h6 class="fw-bold mb-3"><i class="fas fa-briefcase me-2"></i>1. บริษัทล่าสุด</h6>
+                    <div class="row g-2">
+                        <div class="col-12">
+                            <input type="text" class="form-control" name="job1_company" placeholder="ชื่อบริษัท">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" name="job1_position" placeholder="ตำแหน่ง">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" name="job1_duration" placeholder="ระยะเวลา">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" name="job1_sales" placeholder="Target ยอดขายต่อเดือน">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" name="job1_income" placeholder="รายได้รวม">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job 2 -->
+                <div class="history-card">
+                    <h6 class="fw-bold mb-3">2. บริษัทก่อนหน้า</h6>
+                    <div class="row g-2">
+                        <div class="col-12">
+                            <input type="text" class="form-control" name="job2_company" placeholder="ชื่อบริษัท">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" name="job2_position" placeholder="ตำแหน่ง">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" name="job2_duration" placeholder="ระยะเวลา">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" name="job2_sales" placeholder="Target ยอดขายต่อเดือน">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" name="job2_income" placeholder="รายได้รวม">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job 3 -->
+                <div class="history-card">
+                    <h6 class="fw-bold mb-3">3. บริษัทก่อนหน้า</h6>
+                    <div class="row g-2">
+                        <div class="col-12">
+                            <input type="text" class="form-control" name="job3_company" placeholder="ชื่อบริษัท">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" name="job3_position" placeholder="ตำแหน่ง">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" name="job3_duration" placeholder="ระยะเวลา">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" name="job3_sales" placeholder="Target ยอดขายต่อเดือน">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" name="job3_income" placeholder="รายได้รวม">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. ข้อมูลอื่นๆ -->
+                <h4 class="section-title">ข้อมูลเพิ่มเติม</h4>
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label d-block">มีโรคประจำตัวไหม <span class="required-star">*</span></label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="hasDiseaseOption" value="มี" id="diseaseYes" autocomplete="off">
+                            <label class="btn btn-outline-dark" for="diseaseYes">มี</label>
+                            
+                            <input type="radio" class="btn-check" name="hasDiseaseOption" value="ไม่มี" id="diseaseNo" autocomplete="off" checked>
+                            <label class="btn btn-outline-dark" for="diseaseNo">ไม่มี</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6" id="diseaseInputContainer" style="display: none;">
+                         <label class="form-label">ระบุชื่อโรค <span class="required-star">*</span></label>
+                        <input type="text" class="form-control" id="diseaseInput" name="disease" placeholder="ระบุชื่อโรค..." value="ไม่มี">
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label d-block">มีรอยสักนอกร่มผ้าหรือไม่ <span class="required-star">*</span></label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="tattoo" value="มี" id="tattooYes" autocomplete="off">
+                            <label class="btn btn-outline-dark" for="tattooYes">มี</label>
+                          
+                            <input type="radio" class="btn-check" name="tattoo" value="ไม่มี" id="tattooNo" autocomplete="off" checked>
+                            <label class="btn btn-outline-dark" for="tattooNo">ไม่มี</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">รับวัคซีนมาแล้วกี่เข็ม</label>
+                        <div class="input-group">
+                            <button class="btn btn-outline-secondary" type="button" onclick="document.querySelector('[name=vaccine]').stepDown()">-</button>
+                            <input type="number" class="form-control text-center" name="vaccine" min="0" value="0" readonly>
+                            <button class="btn btn-outline-secondary" type="button" onclick="document.querySelector('[name=vaccine]').stepUp()">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. รูปถ่าย -->
+                <h4 class="section-title">รูปถ่ายหน้าตรง</h4>
+                <div class="mb-4">
+                    <label class="form-label">อัปโหลดรูปภาพ (1 รูป) <span class="required-star">*</span></label>
+                    <input type="file" id="fileInput" class="d-none" accept="image/*">
+                    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                        <div class="mb-3">
+                            <i class="fas fa-camera fa-2x p-3 rounded-circle text-black-theme" style="background-color: #eee;"></i>
+                        </div>
+                        <h6 class="fw-bold text-dark">แตะเพื่อถ่ายรูป / เลือกรูป</h6>
+                        <p class="text-muted small mb-0">รองรับไฟล์ JPG, PNG (ขนาดไม่เกิน 5MB)</p>
+                    </div>
+                    <div class="text-center">
+                        <img id="imagePreview" class="preview-image" alt="Preview">
+                        <p id="fileNameDisplay" class="mt-2 text-muted small"></p>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-grid gap-2 mt-5 mb-4">
+                    <button type="submit" class="btn btn-submit">
+                        ยืนยันการลงทะเบียน
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay">
+        <div class="spinner-border text-black-theme" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <h5 class="mt-3 text-black-theme fw-bold">กำลังบันทึกข้อมูล...</h5>
+        <p class="text-muted small">กรุณารอสักครู่ ห้ามปิดหน้าต่างนี้</p>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 for nice alerts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        // ใส่ URL ของ Google Apps Script Web App ที่นี่
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx31__06c32zWg-6S9GMoJJVIeedaabpoXpdAnvxHRgVKc6JF5vCZMatcYieFvXvK95WQ/exec"; 
+        // ============================================
+
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        const branchSelect = document.getElementById('branchSelect');
+        let base64Image = "";
+        let imageMimeType = "";
+        let imageName = "";
+
+        // Function to load branches from Google Sheet
+        async function loadBranches() {
+            try {
+                // สำหรับ doGet บางครั้งอาจติด CORS หรือ Redirect ในบาง environment
+                // แต่ถ้า Deploy as Web App (Anyone can access) โดยทั่วไปจะ fetch ได้
+                // หาก fetch ไม่ได้ อาจต้องใช้เทคนิค JSONP หรือตั้งค่า header ฝั่ง Apps Script เพิ่ม
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL); 
+                const data = await response.json();
+
+                if (data.status === 'success' && data.branches) {
+                    branchSelect.innerHTML = '<option value="" selected disabled>เลือกสาขา...</option>';
+                    data.branches.forEach(branch => {
+                        const option = document.createElement('option');
+                        option.value = branch;
+                        option.textContent = branch;
+                        branchSelect.appendChild(option);
+                    });
+                } else {
+                    branchSelect.innerHTML = '<option value="" disabled>ไม่สามารถโหลดข้อมูลสาขาได้</option>';
+                    console.error('Failed to load branches:', data);
+                }
+            } catch (error) {
+                console.error('Error loading branches:', error);
+                branchSelect.innerHTML = '<option value="" disabled>ไม่สามารถโหลดข้อมูลสาขาได้</option>';
+                // Fallback options (กรณีฉุกเฉิน)
+                const fallbackOption = document.createElement('option');
+                fallbackOption.value = 'อื่นๆ';
+                fallbackOption.textContent = 'อื่นๆ (ระบบขัดข้อง)';
+                branchSelect.appendChild(fallbackOption);
+            }
+        }
+
+        // Load branches on page load
+        document.addEventListener('DOMContentLoaded', loadBranches);
+
+        // Handle File Selection
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'ไฟล์ใหญ่เกินไป',
+                        text: 'กรุณาเลือกไฟล์ขนาดไม่เกิน 5MB',
+                        confirmButtonText: 'ตกลง',
+                        confirmButtonColor: '#000000'
+                    });
+                    this.value = '';
+                    return;
+                }
+
+                imageName = file.name;
+                imageMimeType = file.type;
+                fileNameDisplay.textContent = `ไฟล์ที่เลือก: ${file.name}`;
+
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    imagePreview.src = event.target.result;
+                    imagePreview.style.display = 'inline-block';
+                    base64Image = event.target.result.split(',')[1];
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Disease Toggle
+        function handleDiseaseToggle() {
+            const isYes = document.getElementById('diseaseYes').checked;
+            const container = document.getElementById('diseaseInputContainer');
+            const input = document.getElementById('diseaseInput');
+            
+            if (isYes) {
+                container.style.display = 'block';
+                input.required = true;
+                if (input.value === 'ไม่มี') input.value = ''; 
+            } else {
+                container.style.display = 'none';
+                input.required = false;
+                input.value = 'ไม่มี'; 
+            }
+        }
+
+        document.querySelectorAll('input[name="hasDiseaseOption"]').forEach(r => {
+            r.addEventListener('change', handleDiseaseToggle);
+        });
+        handleDiseaseToggle();
+
+
+        // Handle Form Submit
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Simple Validation
+            if (!this.checkValidity()) {
+                e.stopPropagation();
+                this.classList.add('was-validated');
+                
+                const firstInvalid = this.querySelector(':invalid');
+                if (firstInvalid) {
+                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstInvalid.focus();
+                }
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'ข้อมูลไม่ครบถ้วน',
+                    text: 'กรุณากรอกข้อมูลในช่องที่มีเครื่องหมาย * ให้ครบ',
+                    confirmButtonText: 'ตกลง',
+                    confirmButtonColor: '#000000'
+                });
+                return;
+            }
+
+            if (!base64Image) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'กรุณาอัปโหลดรูปภาพ',
+                    text: 'ต้องมีรูปถ่ายหน้าตรง 1 รูป',
+                    confirmButtonText: 'ตกลง',
+                    confirmButtonColor: '#000000'
+                });
+                
+                document.querySelector('.upload-area').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            // Show Loading
+            document.getElementById('loadingOverlay').style.display = 'flex';
+
+            const formData = new FormData(this);
+            const dataObj = Object.fromEntries(formData.entries());
+            
+            dataObj.image = {
+                data: base64Image,
+                mimeType: imageMimeType,
+                name: imageName
+            };
+
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(dataObj)
+                });
+                
+                const result = await response.json();
+
+                document.getElementById('loadingOverlay').style.display = 'none';
+
+                if (result.status === 'success') {
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'บันทึกสำเร็จ!',
+                        text: 'ข้อมูลของคุณถูกส่งเรียบร้อยแล้ว',
+                        confirmButtonText: 'ปิด',
+                        confirmButtonColor: '#000000',
+                        timer: 3000
+                    });
+                    window.location.reload();
+                } else {
+                    throw new Error(result.message);
+                }
+
+            } catch (error) {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ไม่สามารถส่งข้อมูลได้ กรุณาลองใหม่อีกครั้ง',
+                    confirmButtonText: 'ตกลง',
+                    confirmButtonColor: '#000000'
+                });
+            }
+        });
+    </script>
+</body>
+</html>
